@@ -1,6 +1,6 @@
 @import "tailwindcss";
-@tailwind components;
-@tailwind utilities;
+/* @tailwind components;
+@tailwind utilities; */
 /* Light Theme (default) */
 :root {
   --background: hsl(0, 0%, 98%); /* light-gray */

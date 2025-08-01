@@ -1,20 +1,48 @@
-// app/[country]/page.tsx
-
-
 import CountryDetail from "../components/CountryDetails";
 import Countries from "../data/data.json";
 
+interface Currency {
+  code: string;
+  name: string;
+  symbol: string;
+}
+
+interface Country {
+  name: string;
+  nativeName: string;
+  population: number;
+  region: string;
+  subregion: string;
+  capital: string;
+  topLevelDomain: string[];
+  currencies: Currency[];
+  borders?: string[];
+  flag: string;
+}
+
 interface PageProps {
   params: {
-    country: string; // ✅ must match [country] folder name
+    country: string;
   };
 }
 
-export default function CountryPage({ params }: PageProps) {
-  const decodedName = decodeURIComponent(params.country);
-  const country = Countries.find((c) => c.name === decodedName);
+// Generates static paths at build time
+export async function generateStaticParams() {
+  return Countries.map((country) => ({
+    country: encodeURIComponent(country.name),
+  }));
+}
 
-  if (!country) return <div className="p-10">Country not found.</div>;
+export default async function CountryPage({ params }: PageProps) {
+  const decodedName = decodeURIComponent(params.country);
+  const country: Country | undefined = Countries.find(
+    (c) => c.name === decodedName
+  );
+
+  // ✅ Defensive check
+  if (!country || !country.currencies) {
+    return <div className="p-10">Country or currency data not found.</div>;
+  }
 
   return (
     <CountryDetail
