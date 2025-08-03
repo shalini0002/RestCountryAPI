@@ -1,6 +1,19 @@
 import { FaSearch } from "react-icons/fa";
 
-export function SearchFilter() {
+interface Props {
+  searchTerm: string;
+  region: string;
+  onSearchChange: (value: string) => void;
+  onRegionChange: (value: string) => void;
+}
+
+export function SearchFilter({
+  searchTerm,
+  region,
+  onSearchChange,
+  onRegionChange,
+
+}: Props) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 py-6 gap-6">
       
@@ -19,6 +32,8 @@ export function SearchFilter() {
           color: "var(--foreground)",
         }} 
           type="text"
+          value={searchTerm}
+          onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search for a country..."
           className="w-full outline-none text-sm"
         />
