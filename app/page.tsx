@@ -1,5 +1,3 @@
-// app/page.tsx or app/index.tsx
-
 "use client";
 
 import { useState, useMemo } from "react";
@@ -19,9 +17,12 @@ interface Country {
   };
 }
 
+const ITEMS_PER_PAGE = 12;
+
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [region, setRegion] = useState("");
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
   const filteredCountries = useMemo(() => {
     return (CountriesData as Country[])
@@ -30,6 +31,13 @@ export default function Home() {
       )
       .filter((country) => (region ? country.region === region : true));
   }, [searchTerm, region]);
+
+  // Only show a slice based on current visibleCount
+  const visibleCountries = filteredCountries.slice(0, visibleCount);
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + ITEMS_PER_PAGE);
+  };
 
   return (
     <div
@@ -42,12 +50,18 @@ export default function Home() {
         <SearchFilter
           searchTerm={searchTerm}
           region={region}
-          onSearchChange={setSearchTerm}
-          onRegionChange={setRegion}
+          onSearchChange={(value) => {
+            setSearchTerm(value);
+            setVisibleCount(ITEMS_PER_PAGE); // reset pagination on new search
+          }}
+          onRegionChange={(value) => {
+            setRegion(value);
+            setVisibleCount(ITEMS_PER_PAGE); // reset pagination on new filter
+          }}
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 px-4 py-6">
-          {filteredCountries.map((country, index) => (
+          {visibleCountries.map((country, index) => (
             <CountryCard
               key={index}
               name={country.name}
@@ -58,6 +72,21 @@ export default function Home() {
             />
           ))}
         </div>
+
+        {visibleCount < filteredCountries.length && (
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={handleLoadMore}
+              style={{
+                backgroundColor: "var(--lightbackground)",
+                color: "var(--foreground)",
+              }}
+              className="text-white px-6 py-2 rounded-md shadow transition-colors"
+            >
+              Load More
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

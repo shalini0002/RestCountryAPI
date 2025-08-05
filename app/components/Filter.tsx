@@ -44,7 +44,9 @@ export function SearchFilter({
         backgroundColor: "var(--lightbackground)",
         color: "var(--foreground)",
       }} className="bg-white rounded-md shadow-md px-4 py-2 w-48 cursor-pointer text-sm text-gray-800">
-        <select className="w-full bg-transparent outline-none">
+        <select className="w-full bg-transparent outline-none"
+        value={region}
+        onChange={(e) => onRegionChange(e.target.value)}>
           <option>Filter by Region</option>
           <option>Africa</option>
           <option>Americas</option>
