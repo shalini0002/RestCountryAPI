@@ -78,7 +78,7 @@ interface Country {
   population: number;
   region: string;
   subregion: string;
-  capital: string;
+  capital?: string[];
   topLevelDomain: string[];
   currencies: Currency[];
   borders?: string[];
