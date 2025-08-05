@@ -24,7 +24,10 @@ export default function Home() {
   const [region, setRegion] = useState("");
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
+  // Safeguard against undefined CountriesData
   const filteredCountries = useMemo(() => {
+    if (!CountriesData) return []; // Fallback if no data available
+
     return (CountriesData as Country[])
       .filter((country) =>
         country.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -38,6 +41,14 @@ export default function Home() {
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + ITEMS_PER_PAGE);
   };
+
+  if (!CountriesData || !filteredCountries.length) {
+    return (
+      <div className="text-center">
+        <p>No countries found or data is unavailable.</p>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -68,7 +79,7 @@ export default function Home() {
               population={country.population}
               region={country.region}
               capital={country.capital}
-              flag={country.flag || country.flags?.svg}
+              flag={country.flag || country.flags?.svg || '/default-flag.png'} // Provide fallback flag
             />
           ))}
         </div>
