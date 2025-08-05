@@ -86,9 +86,11 @@ interface Country {
 }
 
 interface PageProps {
-  params: {
+
+  params: Promise<{
     country: string;
-  };
+
+}>;
 }
 
 // ✅ Generate static paths at build time
@@ -99,8 +101,10 @@ export function generateStaticParams() {
 }
 
 // ✅ Page component
-export default function CountryPage({ params }: PageProps) {
-  const decodedName = decodeURIComponent(params.country);
+export default async function CountryPage({ params }: PageProps) {
+  const resolvedParams = await params;
+  const decodedName = encodeURIComponent(resolvedParams.country)
+
   const country: Country | undefined = Countries.find(
     (c) => c.name === decodedName
   );
