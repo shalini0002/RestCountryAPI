@@ -9,7 +9,7 @@ interface Country {
   name: string;
   population: number;
   region: string;
-  capital: string;
+  capital?: string;
   flag?: string;
   flags?: {
     svg: string;
@@ -67,8 +67,8 @@ export default function Home() {
               name={country.name}
               population={country.population}
               region={country.region}
-              capital={country.capital}
-              flag={country.flag || country.flags?.svg}
+              capital={country.capital || "N/A"}
+              flag={country.flag || country.flags?.svg || ""}
             />
           ))}
         </div>
