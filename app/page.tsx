@@ -26,7 +26,7 @@ export default function Home() {
 
   // Safeguard against undefined CountriesData
   const filteredCountries = useMemo(() => {
-    if (!CountriesData) return []; // Fallback if no data available
+    if (!CountriesData) return []; // Fallback if CountriesData is undefined
 
     return (CountriesData as Country[])
       .filter((country) =>
