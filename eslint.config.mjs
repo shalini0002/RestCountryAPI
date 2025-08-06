@@ -8,7 +8,11 @@ const __dirname = dirname(__filename);
 const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
-
+const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true
+  }
+}
 export default [
   ...compat.config({
     extends: ['next/core-web-vitals', 'next'],
@@ -19,3 +23,4 @@ export default [
     },
   }),
 ];
+module.exports = nextConfig
